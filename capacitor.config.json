@@ -1,0 +1,11 @@
+{
+  "appId": "com.example.app",
+  "appName": "loan-mobile",
+  "webDir": "dist",
+  "bundledWebRuntime": true,
+  "server": {
+    "allowNavigation": [        
+        "http://api.cybdzw.com"
+      ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^4.6.2",
+    "axios": "^1.2.1",
+    "laravel-vite-plugin": "^0.7.0",
+    "lodash": "^4.17.19",
+    "postcss": "^8.1.14"
+  },
+  "dependencies": {
+    "@capacitor/android": "^4.6.2",
+    "@capacitor/core": "^4.6.2",
+    "@capacitor/ios": "^4.6.2",
+    "@mdi/font": "^7.1.96",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "signature_pad": "^4.1.4",
+    "vite": "^4.0.4",
+    "vue": "^3.2.36",
+    "vue-loader": "^17.0.1",
+    "vue-router": "^4.1.6",
+    "vue-signature-pad": "^3.0.2",
+    "vuetify": "^3.0.5"
+  }
+}
