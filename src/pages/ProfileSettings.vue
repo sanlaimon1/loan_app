@@ -48,8 +48,7 @@ import ItemsGroup from '../components/ItemsGroup.vue';
 </template>
 
 <script>
-import { router } from "../routes"
-import axios from 'axios';
+import api from '../api';
 
 export default {
     data: () => ({
@@ -60,18 +59,13 @@ export default {
     mounted() {
         const get_username = localStorage.getItem('username');
         this.username = get_username;
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors'
-            }
-        };
-        axios.get('https://www.xmnongfu.com/api/ordersdata', config)
-            .then(function (res) {
+        const token = localStorage.getItem('loginToken');
+        api.get('/api/ordersdata', null, token)
+            .then((res) => {
                 // Handle success
                 this.accountBalance = res.data.data.wallet;
                 this.recentLoan = res.data.data.amount;
-            }.bind(this))
+            })
             .catch(error => {
                 if (error.response) {
                     // Response has been received from the server

@@ -74,7 +74,7 @@ import Loader from "../components/Loader.vue";
 </template>
 
 <script>
-import axios from 'axios';
+import api from "../api";
 import { router } from "../routes"
 
 export default {
@@ -117,20 +117,16 @@ export default {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.form.loading = true;
-                axios.post('https://www.xmnongfu.com/api/register', this.form, {
-                    method: 'HEAD',
-                    mode: 'no-cors',
-                })
-                    .then(function (res) {
+                api.post('/api/register', this.form)
+                    .then((res) => {
                         // Handle success
-                        console.log(res.data);
                         if (res.data.token !== '') {
                             console.log("registered successfully!!");
                             localStorage.setItem('loginToken', res.data.token);
                             localStorage.setItem('username', res.data.user.phone);
                             router.push('/profile');
                         }
-                    }.bind(this))
+                    })
                     .catch(error => {
                         if (error.response) {
                             // Response has been received from the server

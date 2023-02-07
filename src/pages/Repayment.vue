@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api';
 export default {
     data: () => ({
         form: {
@@ -48,17 +48,10 @@ export default {
         }
     },
     mounted() {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors'
-            }
-        };
-        console.log("item", this.items);
-        axios.get('https://www.xmnongfu.com/api/orders', config)
+        const token = localStorage.getItem('loginToken');
+        api.get('/api/orders', null, token)
             .then(function (res) {
                 // Handle success
-                console.log(res)
                 for (var i = 0; i < res.data.data.except; i++) {
                     this.items.push({ repayment: res.data.data.return_money, repayment_date: this.return_date(res.data.data.created_at, i) });
                 }

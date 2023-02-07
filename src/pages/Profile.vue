@@ -53,7 +53,7 @@
                             </v-col>
 
                             <v-col cols="12" md="6" v-if="form.disabled == true">
-                                <img v-bind:src="'https://www.shenbizi.com/'+form.idfrontSide" style="width: 50%;">
+                                <img v-bind:src="apiRoot + form.idfrontSide" style="width: 50%;">
                             </v-col>
                             <v-col cols="12" md="6" v-else>
                                 <v-file-input v-model="form.idfrontSide" :rules="fileSizeRules" label="请上传身份证正面"
@@ -61,7 +61,7 @@
                             </v-col>
 
                             <v-col cols="12" md="6" v-if="form.disabled == true">
-                                <img v-bind:src="'https://www.shenbizi.com/'+form.idbackSide" style="width: 50%;">
+                                <img v-bind:src="apiRoot + form.idbackSide" style="width: 50%;">
                             </v-col>
                             <v-col cols="12" md="6" v-else>
                                 <v-file-input v-model="form.idbackSide" :rules="fileSizeRules" label="请上传身份证背面"
@@ -219,7 +219,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from "../api";
 import { router } from "../routes"
 import Loader from "../components/Loader.vue";
 
@@ -362,17 +362,13 @@ export default {
         },
     },
     async mounted() {
+        console.log("check api",api.apiRoot)
+        this.apiRoot = api.apiRoot;
         const get_username = localStorage.getItem('username');
         this.username = get_username;
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors',
-            }
-        };
-        await axios.get('http://api.cybdzw.com/api/customer_verified', config)
-            .then(function (res) {
-                console.log("imgBug=",res)
+        const token = localStorage.getItem('loginToken');
+        await api.get('/api/customer_verified', null, token)
+            .then((res) => {
                 const verifiedStatus = res.data.data.message || res.data.data.attribute.message;
                 this.verifiedStatus = res.data.data.message || res.data.data.attribute.message;
 
@@ -407,7 +403,7 @@ export default {
                 // } else if(res.data.data.attribute.message == 'notverified'){
                 //     router.push('/apply-loan');
                 // }
-            }.bind(this))
+            })
             .catch(error => {
                 if (error.response) {
                     // Response has been received from the server

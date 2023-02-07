@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from "../api";
 import { router } from "../routes"
 import Loader from "../components/Loader.vue";
 // import {computed} from "vue";
@@ -181,13 +181,8 @@ export default {
     methods: {
         async loanConfirm() {
             this.loading = true;
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                    mode: 'no-cors'
-                }
-            };
-            axios.post('https://www.shenbizi.com/api/orders', this.form, config)
+            const token = localStorage.getItem('loginToken');
+            api.post('/api/orders', this.form, token)
                 .then(function (res) {
                     //Handle success
                     router.push('/bill')
@@ -203,10 +198,8 @@ export default {
         //     this.form.return_money = computed(() => (this.form.amount.toFixed(2) / this.form.except) + (this.form.amount.toFixed(2) * 0.06));
         // },
         checkLoanApplyStatus() {
-            const config = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD', mode: 'no-cors' }
-            };
-            axios.get('https://www.shenbizi.com/api/orders', config)
+            const token = localStorage.getItem('loginToken');
+            api.get('/api/orders', null, token)
                 .then(function (res) {
                     // Handle success
                     this.form.title = res.data.data.title;
@@ -226,18 +219,13 @@ export default {
     },
     async mounted() {
         //this.returnPayment();
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors',
-            }
-        };
-        axios.get('https://www.xmnongfu.com/api/get_customer_bank', config)
-            .then(function (res) {
+        const token = localStorage.getItem('loginToken');
+        api.get('/api/get_customer_bank', null, token)
+            .then((res) => {
                 // Handle success
                 this.form.bank_name = res.data.data.attribute.bank_name;
                 this.form.bank_card_number = res.data.data.attribute.bank_card;
-            }.bind(this))
+            })
             .catch(error => {
                 if (error.response) {
                     this.form.error.message = error.response.data.message

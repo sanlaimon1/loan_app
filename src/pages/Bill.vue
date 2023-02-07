@@ -67,7 +67,7 @@
 
 <script>
 import { router } from '../routes';
-import axios from 'axios';
+import api from '../api';
 export default {
     data: () => ({
         form: {
@@ -86,13 +86,8 @@ export default {
             router.push('/login');
         } else {
             //do new api call for bill apge
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                    mode: 'no-cors'
-                }
-            };
-            axios.get('https://www.xmnongfu.com/api/orders', config)
+            const token = localStorage.getItem('loginToken');
+            api.get('/api/orders', null, token)
                 .then(function (res) {
                     // Handle success
                     this.form.title = res.data.data.title;

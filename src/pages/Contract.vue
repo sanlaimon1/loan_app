@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api';
 export default {
     data: () => ({
         form: {
@@ -23,16 +23,11 @@ export default {
         contracts: [],
     }),
     mounted() {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors'
-            }
-        };
-        axios.get('https://www.xmnongfu.com/api/get_contract_aboutus', config)
-            .then(function (res) {
+        const token = localStorage.getItem('loginToken');
+        api.get('/api/get_contract_aboutus', null, token)
+            .then((res) => {
                 this.contracts.push({ title: res.data.data.contract.title, text: res.data.data.contract.content });
-            }.bind(this))
+            })
             .catch(error => {
                 if (error.response) {
                     // Response has been received from the server

@@ -262,6 +262,12 @@ button.v-btn--elevated{
   border-radius: 0;
   z-index: 99999;
 }
+.v-btn--size-default {
+  min-width: auto!important;
+}
+.no-bg{
+  background: transparent!important;
+}
 @media (min-width: 960px) {
   .v-container {
     max-width: 100%;

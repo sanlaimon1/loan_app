@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from "../api";
 import { router } from "../routes"
 import Loader from "../components/Loader.vue";
 
@@ -134,8 +134,10 @@ export default {
         async sendWithdraw() {
             this.loading = true;
             const config = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors' }
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
+                    mode: 'no-cors'
+                }
             };
             console.log(this.form.order_id);
             axios.get(`https://www.xmnongfu.com/api/withdraw_order/` + this.form.order_id, config)
@@ -173,13 +175,8 @@ export default {
         }
     },
     async mounted() {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors'
-            }
-        };
-        axios.get('https://www.xmnongfu.com/api/orders', config)
+        const token = `Bearer ${localStorage.getItem('loginToken')}`;
+        api.get('/api/orders', null, token)
             .then(function (res) {
                 // Handle success
                 console.log(res.data.data);

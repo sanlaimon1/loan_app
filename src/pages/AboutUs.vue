@@ -15,26 +15,16 @@
 
 <script>
 //import GoBack from "../components/GoBack.vue";
-import axios from 'axios';
+import api from '../api';
 export default {
     data: () => ({
         form: {},
         contents: [],
     }),
     mounted() {
-        console.log("content", this.contents);
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("loginToken")}`, method: 'HEAD',
-                mode: 'no-cors'
-            }
-        };
-        axios.get("https://www.xmnongfu.com/api/get_contract_aboutus", config)
-            .then(function (res) {
-                // Handle success
-                console.log(res.data.data.aboutus);
-                this.contents.push({ title: res.data.data.aboutus.title, text: res.data.data.aboutus.content });
-            }.bind(this))
+        const token = localStorage.getItem('loginToken');
+        api.get("/api/get_contract_aboutus", null, token)
+            .then((res) => this.contents.push({ title: res.data.data.aboutus.title, text: res.data.data.aboutus.content }))
             .catch(error => {
                 if (error.response) {
                     // Response has been received from the server

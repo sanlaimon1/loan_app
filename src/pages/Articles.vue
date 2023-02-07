@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api';
 export default {
     data: () => ({
         articles: [],
@@ -17,20 +17,10 @@ export default {
         readonly: false,
     }),
     mounted() {
-        /*const config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem('loginToken')}` }
-        };*/
-        axios.get('https://www.xmnongfu.com/api/articles', {
-            method: 'HEAD',
-            mode: 'no-cors'
-        })
-            .then(function (res) {
-                // Handle success
-                this.articles = res.data.data
-            }.bind(this))
+        api.get('/api/articles')
+            .then(res => this.articles = res.data.data)
             .catch(error => {
                 if (error.response) {
-                    // Response has been received from the server
                     console.log(error.response.data);
                     // this.form.error.message = error.response.data.message
                 }

@@ -1,52 +1,56 @@
-const apiRoot = 'https://www.xmnongfu.com';
+import axios from "axios";
+const apiRoot = 'https://api.cybdzw.com';
 
 const objectToQueryString = (obj) => {
     return Object.keys(obj).map(key => key + '=' + obj[key]).join('&');
 }
 
 const doRequest = async (path, params, method, activeToken) => {
-    const options = { method, headers: {}, method: 'HEAD', mode: 'no-cors' }
-    //method: 'HEAD', mode: 'no-cors'
-    console.log("chkparams", params);
+    const options = {
+        method, headers: {}
+    }
+    // console.log("chkparams", path, params, method, activeToken);
     if (params) {
         if (method == 'GET') {
             path += '?' + objectToQueryString(params)
-            console.log("chk options", options)
+            // console.log("chk options get", options)
         } else {
-            options.body = params;
+            options.data = params;
         }
     }
     if (activeToken) {
-        options.headers = new Headers({
-            Authorization: `Bearer ${activeToken}`
-        })
+        options.headers = {
+            Authorization: `Bearer ${activeToken}`,
+            'content-type': 'multipart/form-data',
+            method: 'HEAD',
+            mode: 'no-cors'
+        }
     }
-    console.log(apiRoot+path, options)
-    return fetch(apiRoot + path, options).then((res) => {
-        console.log(res)
+    const httpMethods = method.toLowerCase();
+    return axios({
+        method: httpMethods, url: apiRoot + path, data: params, headers: {
+            'Authorization': `Bearer ${activeToken}`
+        }
+    }).then((res) => {
         if (res.status === 204) {
             return undefined;
         }
         if (res.status === 403) {
             activeToken = null;
         }
-        return res.json().then(result => {
-            return result;
-        })
-    })
+        return res;
+    });
 }
-
 const get = (path, params, token) => {
-    console.log(path,params,token);
     return doRequest(path, params, 'GET', token);
 }
 
 const post = (path, params, token) => {
-    console.log(params);
     return doRequest(path, params, 'POST', token);
 }
 
 export default {
     get,
-    post
+    post,
+    apiRoot
 }

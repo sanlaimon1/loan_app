@@ -37,8 +37,8 @@ import Loader from "../components/Loader.vue";
     </v-card>
 </template>
 <script>
-import axios from 'axios';
 import { router } from "../routes"
+import api from '../api';
 
 export default {
     data: () => ({
@@ -47,13 +47,10 @@ export default {
     }),
     methods: {
         checkauthToOrder() {
-            const auth = localStorage.getItem('loginToken');
-            const config = {
-                headers: { Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD', mode: 'no-cors' }
-            };
+            const token = localStorage.getItem('loginToken');
             this.loading = true;
-            if (auth !== null) {
-                axios.get('https://www.xmnongfu.com/api/customer_verified', config)
+            if (token !== null) {
+                api.get('/api/customer_verified', null, token)
                     .then((res) => {
                         this.verifiedStatus = res.data.data.message || res.data.data.attribute.message;
                         // Handle success

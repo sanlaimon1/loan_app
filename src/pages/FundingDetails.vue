@@ -56,7 +56,7 @@
 
 <script>
 import { router } from '../routes';
-import axios from 'axios';
+import api from '../api';
 export default {
     data: () => ({
         form: {
@@ -68,14 +68,8 @@ export default {
         items: [],
     }),
     mounted() {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('loginToken')}`, method: 'HEAD',
-                mode: 'no-cors'
-            }
-        };
-        console.log("item", this.items);
-        axios.get('https://www.xmnongfu.com/api/orders', config)
+        const token = localStorage.getItem('loginToken');
+        api.get('/api/orders', null, token)
             .then(function (res) {
                 // Handle success
                 this.form.order_number = res.data.data.orderno;

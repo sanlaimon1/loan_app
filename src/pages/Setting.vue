@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from "../api";
 import { router } from "../routes"
 import Loader from "../components/Loader.vue";
 
@@ -82,22 +82,14 @@ export default {
     methods: {
         async submit() {
             const { valid } = await this.$refs.form.validate();
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`,
-                    'content-type': 'multipart/form-data',
-                    method: 'HEAD',
-                    mode: 'no-cors'
-                }
-            };
+            const token = localStorage.getItem('loginToken');
             let loanapplyObj = {};
             if (valid) {
                 loanapplyObj.old_password = this.form.old_password;
                 loanapplyObj.new_password = this.form.new_password;
-                console.log(loanapplyObj);
-
+                // console.log(loanapplyObj);
                 this.form.loading = true;
-                axios.post('https://www.xmnongfu.com/api/change_password', this.form, config)
+                api.post('/api/change_password', this.form, token)
                     .then(function (res) {
                         // Handle success
                         // console.log(res);

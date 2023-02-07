@@ -193,9 +193,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { router } from "../routes"
 import Loader from "../components/Loader.vue";
+import api from "../api";
 
 export default {
     data: () => ({
@@ -253,14 +253,7 @@ export default {
     methods: {
         async submit(activeTab, isDisabled, idx) {
             const { valid } = await this.$refs.form.validate();
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`,
-                    'content-type': 'multipart/form-data',
-                    method: 'HEAD',
-                    mode: 'no-cors'
-                }
-            };
+            const token = localStorage.getItem('loginToken');
             let loanapplyObj = {};
             if (valid) {
                 loanapplyObj.name = this.form.id_name;
@@ -284,10 +277,9 @@ export default {
                     if(loanapplyObj.signature == ''){
                         this.loading = false;
                     }
-                    axios.post('https://www.xmnongfu.com/api/customer_verified', this.form, config)
+                    api.post('/api/customer_verified', this.form, token)
                         .then(function (res) {
                             // Handle success
-                            console.log("chkres=>",res)
                             router.push('/apply-loan-confirm');
                         }.bind(this))
                         .catch(error => {

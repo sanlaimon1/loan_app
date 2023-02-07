@@ -2,13 +2,13 @@
     <v-toolbar color="transparent">
         <GoBack v-show="$route.path != '/'" />
         <span v-if="islogin">
-            <v-btn color="black" variant="text" class="mx-2" @click="handleLogout">
+            <v-btn color="black" variant="text" class="mx-0" @click="handleLogout">
                 退出
             </v-btn>
         </span>
         <span v-else>
             <router-link to="/register" style="text-decoration:none;">
-                <v-btn color="black" variant="text" class="mx-2">
+                <v-btn color="black" variant="text" class="mx-0">
                     注册
                 </v-btn>
             </router-link>

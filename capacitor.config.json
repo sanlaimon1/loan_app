@@ -1,11 +1,11 @@
 {
   "appId": "com.example.app",
-  "appName": "loan-mobile",
+  "appName": "携程金融",
   "webDir": "dist",
   "bundledWebRuntime": true,
   "server": {
     "allowNavigation": [        
-        "http://api.cybdzw.com"
+        "https://api.cybdzw.com"
       ]
   }
 }
