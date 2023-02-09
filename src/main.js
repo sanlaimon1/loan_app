@@ -11,7 +11,7 @@ import * as directives from 'vuetify/directives'
 
 //mdi font
 import '@mdi/font/css/materialdesignicons.css'
-import './assets/app.css'
+import './assets/blue.css'
 
 const vuetify = createVuetify({
     components,

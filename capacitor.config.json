@@ -7,5 +7,11 @@
     "allowNavigation": [        
         "https://api.cybdzw.com"
       ]
+  },
+  "plugins": {
+    "SplashScreen":{
+      "launchShowDuration": 0,
+      "launchAutoHide": true
+    }
   }
 }

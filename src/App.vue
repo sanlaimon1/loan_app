@@ -15,6 +15,8 @@
 import BottomNav from './components/BottomNav.vue';
 import TopNav from './components/TopNav.vue';
 import Home from './pages/Home.vue';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 export default {
   setup() {
@@ -32,6 +34,9 @@ export default {
   },
   mounted() {
     this.serviceUrl = localStorage.getItem('serviceUrl');
+    SplashScreen.hide();
+    StatusBar.hide();
+    StatusBar.setBackgroundColor({ color: '#2784ff !important' });
   },
 }
 </script>
