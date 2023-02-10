@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div v-if="loading">
+        <Loader />
+    </div>
+    <div v-else>
         <v-row>
             <v-col cols="12">
                 <v-card class="mx-auto mb-5" style="padding: 2% !important;" outlined>
@@ -16,24 +19,32 @@
 <script>
 //import GoBack from "../components/GoBack.vue";
 import api from '../api';
+import Loader from "../components/Loader.vue";
+
 export default {
     data: () => ({
-        form: {},
+        loading: false,
         contents: [],
     }),
     mounted() {
+        this.loading = true;
         const token = localStorage.getItem('loginToken');
         api.get("/api/get_contract_aboutus", null, token)
-            .then((res) => this.contents.push({ title: res.data.data.aboutus.title, text: res.data.data.aboutus.content }))
+            .then((res) => {
+                this.contents.push({ title: res.data.data.aboutus.title, text: res.data.data.aboutus.content })
+                this.loading = false;
+            })
             .catch(error => {
                 if (error.response) {
                     // Response has been received from the server
                     this.form.error.message = error.response.data.message;
+                    this.loading = false;
                 }
             });
     },
     components: {
         //GoBack
+        Loader
     }
 }
 </script>
