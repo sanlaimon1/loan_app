@@ -10,8 +10,7 @@
   },
   "plugins": {
     "SplashScreen":{
-      "launchShowDuration": 0,
-      "launchAutoHide": true
+      "launchShowDuration": 0
     }
   }
 }

@@ -683,7 +683,7 @@ export default {
             const config = {
                 onUploadProgress: progressEvent => {
                     const { loaded, total } = progressEvent;
-                    this.progress = Math.round((loaded * 100) / total);
+                    this.progress = Math.round((loaded * 100) / total)/2;
                 }
             };
             let image = new Image();
