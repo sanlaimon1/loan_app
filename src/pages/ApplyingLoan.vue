@@ -69,9 +69,10 @@
                                 <v-label style="text-align: center; font-weight: bold;">国徽面</v-label>
                                 <v-col cols="12" md="6" style="padding: 0% !important;">
                                     <div v-if="!form.idbackSideUploaded">
-                                        <v-img src="assets/back-of-id-card.png" width="90%" height="75%"></v-img>
+                                        <v-img src="assets/back-of-id-card.png" width="90%" height="75%"></v-img>                                
                                     </div>
                                     <div v-else>
+                                       
                                         <v-img :src="form.idbackSideUploaded" width="90%" height="75%"></v-img>
                                     </div>
                                     <v-file-input class="file_input" v-model="form.idbackSide" :rules="fileSizeRules" label="" prepend-icon="mdi-camera"
@@ -377,6 +378,7 @@ import axios, { formToJSON } from 'axios';
 import { router } from "../routes"
 import Loader from "../components/Loader.vue";
 import ProgressBar from "../components/ProgressBar.vue"
+import api from '../api';
 
 export default {
     data: () => ({
@@ -633,17 +635,11 @@ export default {
         },
         async saveFrontPhoto() {
             this.progress = 0;
+            const token = localStorage.getItem('loginToken');
             const config = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`,
-                    'content-type': 'multipart/form-data',
-                },
                 onUploadProgress: progressEvent => {
                     const { loaded, total } = progressEvent;
                     this.progress = Math.round((loaded * 100) / total);
-                    if (this.progress < 100) {
-                        console.log(`${loaded} bytes of ${total} bytes.${this.progress}%`)
-                    }
                 }
             };
             //changing webp
@@ -660,19 +656,20 @@ export default {
                     // Now we have a `blob` containing webp data
                     // Use the file rename trick to turn it back into a file
                     const myImage = new File([blob], 'my-new-name.webp', { type: blob.type });
-                    axios.post('/api/oneuser/frontid_image', { 'idfrontSide': myImage }, config)
+                    api.post('/api/oneuser/frontid_image', { 'idfrontSide': myImage }, token, config)
                         .then(function (res) {
                             // Handle success
                             if (res.status == 200) {
-                                localStorage.setItem('idfrontSide', res.data.frontid_image_path);
-                                this.form.idfrontSideUploaded = res.data.frontid_image_path;
+                                localStorage.setItem('idfrontSide', api.apiRoot + res.data.frontid_image_path);
+                                this.form.idfrontSideUploaded = api.apiRoot + res.data.frontid_image_path;
+                                this.progress = 100;
                             }
                         }.bind(this))
                         .catch(error => {
                             if (error.response) {
                                 // Response has been received from the server
                                 this.loading = false;
-                                this.progress = 100;
+                                this.progress = 0;
                                 this.form.error.message = error.response.data.message;
                             }
                         });
@@ -682,17 +679,11 @@ export default {
         },
         async saveBackPhoto() {
             this.progress2 = 0;
+            const token = localStorage.getItem('loginToken');
             const config = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`,
-                    'content-type': 'multipart/form-data',
-                },
                 onUploadProgress: progressEvent => {
                     const { loaded, total } = progressEvent;
-                    this.progress2 = Math.round((loaded * 100) / total);
-                    if (this.progress2 < 100) {
-                        console.log(`${loaded} bytes of ${total} bytes.${this.progress}%`)
-                    }
+                    this.progress = Math.round((loaded * 100) / total);
                 }
             };
             let image = new Image();
@@ -705,19 +696,20 @@ export default {
                     // Now we have a `blob` containing webp data
                     // Use the file rename trick to turn it back into a file
                     const myImage = new File([blob], 'my-new-name.webp', { type: blob.type });
-                    axios.post('/api/oneuser/backid_image', { 'idbackSide': myImage }, config)
+                    api.post('/api/oneuser/backid_image', { 'idbackSide': myImage }, token, config)
                         .then(function (res) {
                             // Handle success
                             if (res.status == 200) {
-                                localStorage.setItem('idbackSide', res.data.backid_image_path);
-                                this.form.idbackSideUploaded = res.data.backid_image_path;
+                                localStorage.setItem('idbackSide', api.apiRoot + res.data.backid_image_path);
+                                this.form.idbackSideUploaded = api.apiRoot + res.data.backid_image_path;
+                                this.progress2 = 100;
                             }
                         }.bind(this))
                         .catch(error => {
                             if (error.response) {
                                 // Response has been received from the server
                                 this.loading = false;
-                                this.progress = 100;
+                                this.progress2 = 0;
                                 this.form.error.message = error.response.data.message;
                             }
                         });

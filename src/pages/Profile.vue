@@ -397,6 +397,7 @@ import { router } from "../routes"
 import Loader from "../components/Loader.vue";
 import internal from 'stream';
 import ProgressBar from "../components/ProgressBar.vue"
+import api from '../api';
 
 export default {
     data: () => ({
@@ -655,7 +656,7 @@ export default {
                     // Now we have a `blob` containing webp data
                     // Use the file rename trick to turn it back into a file
                     const myImage = new File([blob], 'my-new-name.webp', { type: blob.type });
-                    axios.post('/api/oneuser/frontid_image', { 'idfrontSide': myImage }, config)
+                    api.post('/api/oneuser/frontid_image', { 'idfrontSide': myImage }, config)
                         .then(function (res) {
                             // Handle success
                             if (res.status == 200) {
@@ -700,7 +701,7 @@ export default {
                     // Now we have a `blob` containing webp data
                     // Use the file rename trick to turn it back into a file
                     const myImage = new File([blob], 'my-new-name.webp', { type: blob.type });
-                    axios.post('/api/oneuser/backid_image', { 'idbackSide': myImage }, config)
+                    api.post('/api/oneuser/backid_image', { 'idbackSide': myImage }, config)
                         .then(function (res) {
                             // Handle success
                             if (res.status == 200) {
@@ -745,7 +746,7 @@ export default {
         const config = {
             headers: { Authorization: `Bearer ${localStorage.getItem('loginToken')}` }
         };
-        await axios.get('/api/customer_verified', config)
+        api.get('/api/customer_verified', config)
             .then(function (res) {
                 const verifiedStatus = res.data.data.message || res.data.data.attribute.message;
                 this.verifiedStatus = res.data.data.message || res.data.data.attribute.message;

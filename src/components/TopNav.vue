@@ -57,6 +57,8 @@ export default {
             if (localStorage.getItem('loginToken') !== null) {
                 localStorage.removeItem('loginToken');
                 localStorage.removeItem('username');
+                localStorage.removeItem('idfrontSide');
+                localStorage.removeItem('idbackSide');
                 this.islogin = false;
                 router.push('/');
             }
