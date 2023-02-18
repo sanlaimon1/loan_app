@@ -672,7 +672,7 @@ export default {
                             if (error.response) {
                                 // Response has been received from the server
                                 this.loading = false;
-                                this.progress = 0;
+                                this.progress = 100;
                                 this.form.error.message = error.response.data.message;
                             }
                         });
@@ -717,7 +717,7 @@ export default {
                             if (error.response) {
                                 // Response has been received from the server
                                 this.loading = false;
-                                this.progress = 0;
+                                this.progress = 100;
                                 this.form.error.message = error.response.data.message;
                             }
                         });
