@@ -20,6 +20,5 @@ const vuetify = createVuetify({
     icons: {
         defaultSet: 'mdi'
     }
-
 })
 createApp(App).use(vuetify).use(router).use(VueSignaturePad).mount("#app");
