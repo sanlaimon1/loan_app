@@ -55,7 +55,11 @@ export default {
                         this.verifiedStatus = res.data.data.message || res.data.data.attribute.message;
                         // Handle success
                         if(this.verifiedStatus == "已验证"){
-                            router.push('/apply-loan-confirm');
+                            if(status ==1){
+                                router.push('/apply-loan-confirm');
+                            }else {
+                                router.push('/profile');
+                            }
                         }else{
                             router.push('/apply-loan');
                         }

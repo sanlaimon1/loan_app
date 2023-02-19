@@ -79,7 +79,7 @@
                                     <v-file-input class="file_input" v-model="form.idbackSide" :rules="fileSizeRules" label="" prepend-icon="mdi-camera"
                                         accept="image/*;capture=camera" @change="saveBackPhoto" :disabled="form.fileInput"></v-file-input>
                                     <v-progress-linear v-model="progress2" color="green" height="20" :model-value="progress2"
-                                        striped v-show="progress2 < 100"></v-progress-linear>
+                                        striped v-if="progress2 < 100"></v-progress-linear>
                                 </v-col>
                             </v-col>
 
@@ -677,7 +677,10 @@ export default {
             const config = {
                 onUploadProgress: progressEvent => {
                     const { loaded, total } = progressEvent;
-                    this.progress = Math.round((loaded * 100) / total);
+                    this.progress = Math.round((loaded * 100) / total)/1.2;
+                    if (this.progress < 100) {
+                        console.log(`${loaded} bytes of ${total} bytes.${this.progress}%`)
+                    }
                 }
             };
             let image = new Image();
