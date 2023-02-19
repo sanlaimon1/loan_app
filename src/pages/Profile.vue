@@ -20,9 +20,9 @@
             <span class="text-h5">个人信息</span>
         </v-card-title><br />
 
-        <v-card-title>
-            <span class="text-h5">{{ form.isverified }}</span>
-        </v-card-title>
+        <!-- <v-card-title>
+                <span class="text-h5">{{ form.isverified }}</span>
+            </v-card-title> -->
         <!-- https://www.codermen.com/how-to-display-a-loader-while-sent-request-is-in-progress-in-vue/ -->
         <div v-if="form.loading">
             <Loader />
@@ -39,7 +39,7 @@
             <v-window v-model="tab">
                 <v-window-item value="verify" class="medium-pd">
                     <v-form ref="form" v-model="valid" lazy-validation
-                        @submit.prevent="submit('verify','contactMember', false, 1)" enctype="multipart/form-data">
+                        @submit.prevent="submit('verify', 'contactMember', false, 1)" enctype="multipart/form-data">
                         <v-row>
                             <v-col cols="12" md="6">
                                 <v-text-field type="text" v-model="form.id_name" :disabled="form.disabled"
@@ -47,7 +47,8 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" md="6">
-                                <v-text-field type="number" v-model="form.id_number" :rules="nameRules" :disabled="form.disabled" label="身份证号">
+                                <v-text-field type="number" v-model="form.id_number" :rules="nameRules"
+                                    :disabled="form.disabled" label="身份证号">
                                 </v-text-field>
                             </v-col>
 
@@ -60,10 +61,11 @@
                                     <div v-else>
                                         <v-img :src="form.idfrontSideUploaded" width="90%" height="75%"></v-img>
                                     </div>
-                                    <v-file-input class="file_input" v-model="form.idfrontSide" :rules="fileSizeRules" label="" prepend-icon="mdi-camera"
-                                        accept="image/*;capture=camera" @change="saveFrontPhoto" :disabled="form.fileInput"></v-file-input>
+                                    <v-file-input class="file_input" v-model="form.idfrontSide" :rules="fileSizeRules"
+                                        label="" prepend-icon="mdi-camera" accept="image/*;capture=camera"
+                                        @change="saveFrontPhoto" :disabled="form.fileInput"></v-file-input>
                                     <v-progress-linear v-model="progress" color="green" height="20" :model-value="progress"
-                                        striped v-show="progress < 100"></v-progress-linear>
+                                        striped v-if="progress < 100"></v-progress-linear>
                                 </v-col>
                             </v-col>
 
@@ -76,20 +78,21 @@
                                     <div v-else>
                                         <v-img :src="form.idbackSideUploaded" width="90%" height="75%"></v-img>
                                     </div>
-                                    <v-file-input class="file_input" v-model="form.idbackSide" :rules="fileSizeRules" label="" prepend-icon="mdi-camera"
-                                        accept="image/*;capture=camera" @change="saveBackPhoto" :disabled="form.fileInput"></v-file-input>
-                                    <v-progress-linear v-model="progress2" color="green" height="20" :model-value="progress2"
-                                        striped v-if="progress2 < 100"></v-progress-linear>
+                                    <v-file-input class="file_input" v-model="form.idbackSide" :rules="fileSizeRules"
+                                        label="" prepend-icon="mdi-camera" accept="image/*;capture=camera"
+                                        @change="saveBackPhoto" :disabled="form.fileInput"></v-file-input>
+                                    <v-progress-linear v-model="progress2" color="green" height="20"
+                                        :model-value="progress2" striped v-if="progress2 < 100"></v-progress-linear>
                                 </v-col>
                             </v-col>
 
                             <!-- <span style="color: red">{{
-                                form.error.message ? form.error.message : ''
-                            }}</span> -->
+                                    form.error.message ? form.error.message : ''
+                                }}</span> -->
 
                             <span style="color: red;display: block;padding: 10px 40px;">{{
-                                form.error.message ?
-                                    form.error.message : ''
+                                form.error.message && form.error.tabName == 'verify' ?
+                                form.error.message : ''
                             }}</span>
 
                             <v-btn block color="#f6655a" size="large" type="submit" :disabled="form.disabled">
@@ -101,7 +104,7 @@
 
                 <v-window-item value="contactMember" class="medium-pd">
                     <v-form ref="form" v-model="valid" lazy-validation
-                        @submit.prevent="submit('contact_person','cardInfo', false, 2)">
+                        @submit.prevent="submit('contact_person', 'cardInfo', false, 2)">
                         <v-row>
                             <v-col cols="12" md="6">
                                 <v-text-field type="text" :disabled="form.disabled" v-model="form.contactperson1"
@@ -120,18 +123,17 @@
                                 </v-text-field>
                             </v-col>
                             <v-col cols="12" md="6">
-                                <v-text-field type="number" :disabled="form.disabled" v-model="form.phone2"
-                                    label="联系人电话">
+                                <v-text-field type="number" :disabled="form.disabled" v-model="form.phone2" label="联系人电话">
                                 </v-text-field>
                             </v-col>
 
                             <!-- <span style="color: red">{{
-                                form.error.message ? form.error.message : ''
-                            }}</span> -->
+                                    form.error.message ? form.error.message : ''
+                                }}</span> -->
 
                             <span style="color: red;display: block;padding: 10px 40px;">{{
-                                form.error.message ?
-                                    form.error.message : ''
+                                form.error.message && form.error.tabName == 'contact_person' ?
+                                form.error.message : ''
                             }}</span>
 
                             <v-btn block color="#f6655a" size="large" type="submit" :disabled="form.disabled">
@@ -142,7 +144,8 @@
                 </v-window-item>
 
                 <v-window-item value="cardInfo" class="medium-pd">
-                    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit('bankcard_info','personalInfo', false, 3)">
+                    <v-form ref="form" v-model="valid" lazy-validation
+                        @submit.prevent="submit('bankcard_info', 'personalInfo', false, 3)">
                         <v-row>
                             <v-col cols="12">
                                 <v-select :disabled="form.disabled" v-model="form.bank_name" :items="banks" label="银行名称"
@@ -156,17 +159,17 @@
                             </v-col>
 
                             <v-col cols="12">
-                                <v-text-field type="number" :disabled="form.disabled" v-model="form.bank_card"
-                                    label="卡号" :rules="numberRules">
+                                <v-text-field type="number" :disabled="form.disabled" v-model="form.bank_card" label="卡号"
+                                    :rules="numberRules">
                                 </v-text-field>
                                 <!-- <span style="color: red">{{
-                                    form.error.message ? form.error.message : ''
-                                }}</span> -->
+                                        form.error.message ? form.error.message : ''
+                                    }}</span> -->
                             </v-col>
 
                             <span style="color: red;display: block;padding: 10px 40px;">{{
-                                form.error.message ?
-                                    form.error.message : ''
+                                form.error.message && form.error.tabName == 'bankcard_info' ?
+                                form.error.message : ''
                             }}</span>
 
                             <v-btn block color="#f6655a" size="large" type="submit" :disabled="form.disabled">
@@ -177,38 +180,45 @@
                 </v-window-item>
 
                 <v-window-item value="personalInfo" class="medium-pd">
-                    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit('personal_info','signature', false, 4)">
+                    <v-form ref="form" v-model="valid" lazy-validation
+                        @submit.prevent="submit('personal_info', 'signature', false, 4)">
                         <v-row>
 
-                            <v-expansion-panels v-model="panel" multiple>
+                            <v-expansion-panels v-model="form.panel" multiple>
                                 <v-expansion-panel>
                                     <v-expansion-panel-title>个人信息</v-expansion-panel-title>
                                     <v-expansion-panel-text>
                                         <v-row>
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.residential" :items="residential" label="住宅性质" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.residential"
+                                                    :items="residential" label="住宅性质" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.education" :items="education" label="教育程度" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.education"
+                                                    :items="education" label="教育程度" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
 
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.marital" :items="marital" label="婚姻状态" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.marital" :items="marital"
+                                                    label="婚姻状态" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="text" v-model="form.contact_info" :disabled="form.disabled" label="联系方式" :rules="nameRules">
+                                                <v-text-field type="text" v-model="form.contact_info"
+                                                    :disabled="form.disabled" label="联系方式" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
 
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.province_residence" :items="province_residence" label="居住省份" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.province_residence"
+                                                    :items="province_residence" label="居住省份" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="text" v-model="form.address" :disabled="form.disabled" label="详细地址" :rules="nameRules">
+                                                <v-text-field type="text" v-model="form.address" :disabled="form.disabled"
+                                                    label="详细地址" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
                                         </v-row>
@@ -220,37 +230,47 @@
                                     <v-expansion-panel-text>
                                         <v-row>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="text" v-model="form.company_name" :disabled="form.disabled" label="单位名称" :rules="nameRules">
+                                                <v-text-field type="text" v-model="form.company_name"
+                                                    :disabled="form.disabled" label="单位名称" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.social_status" :items="social_status" label="社会身份" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.social_status"
+                                                    :items="social_status" label="社会身份" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
 
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.unit_type" :items="unit_type" label="单位类别" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.unit_type"
+                                                    :items="unit_type" label="单位类别" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                             <v-col cols="6" md="3">
-                                                <v-select :disabled="form.disabled" v-model="form.unit_address_state" :items="unit_address_state" :onchange="get_township(form.unit_address_state)" label="单位地址" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.unit_address_state"
+                                                    :items="unit_address_state"
+                                                    :onchange="get_township(form.unit_address_state)" label="单位地址"
+                                                    :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                             <v-col cols="6" md="3">
-                                                <v-select :disabled="form.disabled" v-model="form.unit_address_township" :items="selected_township" label="单位地址" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.unit_address_township"
+                                                    :items="selected_township" label="单位地址" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
 
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="text" v-model="form.unit_other_address" :disabled="form.disabled" label="详细地址" :rules="nameRules">
+                                                <v-text-field type="text" v-model="form.unit_other_address"
+                                                    :disabled="form.disabled" label="详细地址" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.monthly_income" :items="monthly_income" label="月收入" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.monthly_income"
+                                                    :items="monthly_income" label="月收入" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="number" v-model="form.work_phone" :disabled="form.disabled" label="单位电话" :rules="nameRules">
+                                                <v-text-field type="number" v-model="form.work_phone"
+                                                    :disabled="form.disabled" label="单位电话" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
                                         </v-row>
@@ -262,16 +282,19 @@
                                     <v-expansion-panel-text>
                                         <v-row>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="text" v-model="form.family_name" :disabled="form.disabled" label="姓名" :rules="nameRules">
+                                                <v-text-field type="text" v-model="form.family_name"
+                                                    :disabled="form.disabled" label="姓名" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="number" v-model="form.family_ph_number" :disabled="form.disabled" label="手机号码" :rules="nameRules">
+                                                <v-text-field type="number" v-model="form.family_ph_number"
+                                                    :disabled="form.disabled" label="手机号码" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
 
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.family_relation" :items="family_relation" label="关系" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.family_relation"
+                                                    :items="family_relation" label="关系" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                         </v-row>
@@ -283,16 +306,19 @@
                                     <v-expansion-panel-text>
                                         <v-row>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="text" v-model="form.emergency_name" :disabled="form.disabled" label="姓名" :rules="nameRules">
+                                                <v-text-field type="text" v-model="form.emergency_name"
+                                                    :disabled="form.disabled" label="姓名" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
                                             <v-col cols="12" md="6">
-                                                <v-text-field type="number" v-model="form.emergency_ph_number" :disabled="form.disabled" label="手机号码" :rules="nameRules">
+                                                <v-text-field type="number" v-model="form.emergency_ph_number"
+                                                    :disabled="form.disabled" label="手机号码" :rules="nameRules">
                                                 </v-text-field>
                                             </v-col>
 
                                             <v-col cols="12" md="6">
-                                                <v-select :disabled="form.disabled" v-model="form.emergency_relation" :items="family_relation" label="关系" :rules="nameRules">
+                                                <v-select :disabled="form.disabled" v-model="form.emergency_relation"
+                                                    :items="family_relation" label="关系" :rules="nameRules">
                                                 </v-select>
                                             </v-col>
                                         </v-row>
@@ -301,8 +327,8 @@
                             </v-expansion-panels>
 
                             <span style="color: red;display: block;padding: 10px 40px;">{{
-                                form.error.message ?
-                                    form.error.message : ''
+                                form.error.message && form.error.tabName == 'personal_info' ?
+                                form.error.message : ''
                             }}</span>
 
                             <v-btn block color="#f6655a" size="large" type="submit" :disabled="form.disabled">
@@ -313,10 +339,10 @@
                 </v-window-item>
 
                 <v-window-item value="signature" class="medium-pd" style="padding-top: 0px; padding-bottom: 0px;">
-                    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit('sign','remark', false, 5)">
+                    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit('sign', 'remark', false, 5)">
                         <!-- <VueSignaturePad id="signature" width="100%" height="200px" ref="signaturePad"
-                            :options="{ onBegin: () => { $refs.signaturePad.resizeCanvas() } }"
-                            v-model="form.signature" /> -->
+                                :options="{ onBegin: () => { $refs.signaturePad.resizeCanvas() } }"
+                                v-model="form.signature" /> -->
 
                         <v-alert close-label="Close Alert" type="success" :value="form.signature_alert"
                             v-if="form.signature_alert">
@@ -338,8 +364,7 @@
 
                         <v-row>
                             <v-col cols="6" md="6">
-                                撤销 <v-btn icon="mdi-cached" :disabled="form.disabled" color="info"
-                                    @click="undo"></v-btn>
+                                撤销 <v-btn icon="mdi-cached" :disabled="form.disabled" color="info" @click="undo"></v-btn>
                             </v-col>
 
                             <v-col cols="6" md="6" class="text-right">
@@ -350,8 +375,8 @@
                         </v-row>
 
                         <span style="color: red;display: block;padding: 10px 40px;">{{
-                            form.error.message ?
-                                form.error.message : ''
+                            form.error.message && form.error.tabName == 'sign' ?
+                            form.error.message : ''
                         }}</span>
 
                         <v-btn block color="#f6655a" size="large" type="submit" :disabled="form.disabled">
@@ -363,7 +388,7 @@
 
 
                 <v-window-item value="remark" class="medium-pd">
-                    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit('remark','remark', false, 5)"
+                    <v-form ref="form" v-model="valid" lazy-validation @submit.prevent="submit('remark', 'remark', false, 5)"
                         method="post">
                         <v-row>
                             <v-col cols="12">
@@ -373,12 +398,12 @@
                             </v-col>
 
                             <span style="color: red;display: block;padding: 10px 40px;">{{
-                                form.error.message ?
-                                    form.error.message : ''
+                                form.error.message && form.error.tabName == 'remark' ?
+                                form.error.message : ''
                             }}</span>
                             <!-- <v-btn block color="#f6655a" size="large" type="submit" :disabled="form.disabled">
-                                申请贷款
-                            </v-btn> -->
+                                    申请贷款
+                                </v-btn> -->
                             <v-btn block color="#f6655a" size="large" type="submit"
                                 :disabled="form.isverified == '已验证' ? true : false">
                                 申请贷款
@@ -437,18 +462,19 @@ export default {
             address: '',
             social_status: '',
             unit_type: '',
-            unit_address_state:'',
-            unit_address_township:'',
-            unit_other_address:'',
-            monthly_income:'',
-            work_phone:'',
-            family_name:'',
-            family_ph_number:'',
-            family_relation:'',
-            emergency_name:'',
-            emergency_ph_number:'',
-            emergency_relation:'',
+            unit_address_state: '',
+            unit_address_township: '',
+            unit_other_address: '',
+            monthly_income: '',
+            work_phone: '',
+            family_name: '',
+            family_ph_number: '',
+            family_relation: '',
+            emergency_name: '',
+            emergency_ph_number: '',
+            emergency_relation: '',
             fileInput: false,
+            panel: [0],
         },
         nameRules: [
             v => !!v || '必填项'
@@ -492,7 +518,7 @@ export default {
         progress2: 100,
         residential: ["住宅性质", "商品房", "经济适用房", "单位用房", "独自租房", "自建房", "其他"],
         education: ["初中", "高中", "专科", "本科", "硕士"],
-        marital: ["已婚","未婚"],
+        marital: ["已婚", "未婚"],
         province_residence: [
             "北京", "上海", "重庆", "天津", "香港", "澳门", "内蒙古自治区", "新疆维吾尔自治区", "广西壮族自治区", "宁夏回族自治区",
             "西藏自治区", "黑龙江", "吉林", "辽宁", "河北", "山西", "江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北",
@@ -505,7 +531,6 @@ export default {
         unit_address_state: [],
         state_township: [],
         selected_township: [],
-        panel: [0],
     }),
     components: {
         Loader,
@@ -515,26 +540,30 @@ export default {
         async submit(tabName, activeTab, isDisabled, idx) {
             const isOnline = navigator.onLine;
             const { valid } = await this.$refs.form.validate();
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('loginToken')}`,
-                    'content-type': 'multipart/form-data'
-                }
-            };
+            // const config = {
+            //     headers: {
+            //         Authorization: `Bearer ${localStorage.getItem('loginToken')}`,
+            //         'content-type': 'multipart/form-data'
+            //     }
+            // };
+            const token = localStorage.getItem('loginToken');
+            if (tabName == 'personal_info') {
+                this.form.panel.push(1, 2, 3)
+            }
             let loanapplyObj = {};
             if (valid) {
-                if(tabName == 'verify') {
+                if (tabName == 'verify') {
                     loanapplyObj.name = this.form.id_name;
                     loanapplyObj.id_number = this.form.id_number;
-                }else if(tabName == 'contact_person') {
+                } else if (tabName == 'contact_person') {
                     loanapplyObj.contactperson1 = this.form.contactperson1;
                     loanapplyObj.phone1 = this.form.phone1;
                     loanapplyObj.contactperson2 = this.form.contactperson2;
                     loanapplyObj.phone2 = this.form.phone2;
-                }else if(tabName == 'bankcard_info') {
+                } else if (tabName == 'bankcard_info') {
                     loanapplyObj.bank_name = this.form.bank_name;
                     loanapplyObj.bank_card = this.form.bank_card;
-                }else if(tabName == 'personal_info') {
+                } else if (tabName == 'personal_info') {
                     loanapplyObj.residential = this.form.residential;
                     loanapplyObj.education = this.form.education;
                     loanapplyObj.marital = this.form.marital;
@@ -554,13 +583,13 @@ export default {
                     loanapplyObj.emergency_name = this.form.emergency_name;
                     loanapplyObj.emergency_ph_number = this.form.emergency_ph_number;
                     loanapplyObj.emergency_relation = this.form.emergency_relation;
-                }else if(tabName == 'sign') {
+                } else if (tabName == 'sign') {
                     loanapplyObj.signature = this.form.signature;
                     if (loanapplyObj.signature == '' || loanapplyObj.signature == undefined) {
                         this.form.loading = false;
                         this.form.error.message = '您的签名没有保存';
-                    }                    
-                }else{
+                    }
+                } else {
                     loanapplyObj.remark = this.form.remark;
                     if (loanapplyObj.remark !== '') {
                         this.form.loading = true;
@@ -572,24 +601,24 @@ export default {
                 if (isOnline) {
                     // this.form.loading = true;
                     const get_api = '/api/oneuser/' + tabName;
-                    axios.post(get_api , this.form, config)
+                    api.post(get_api, this.form, token)
                         .then(function (res) {
                             // Handle success
                             this.tab = activeTab;
-                            if(tabName == 'remark'){
+                            if (tabName == 'remark') {
                                 router.push('/profile');
                                 window.location.reload();
                             }
-                            
+
                         }.bind(this))
                         .catch(error => {
                             if (error.response) {
-                                console.log(idx);
-                                console.log(tabName);
                                 // Response has been received from the server
-                                // this.tab = tabName;
-                                // this.items[idx].disabled = false;
+                                this.tab = tabName == 'personal_info' ? 'personalInfo' : tabName;
+
+                                this.items[idx].disabled = true;
                                 this.form.loading = false;
+                                this.form.error.tabName = tabName;
                                 this.form.error.message = error.response.data.message;
                             }
                         });
@@ -627,15 +656,17 @@ export default {
         // setBackImage(event) {
         //     this.form.showBackImage = URL.createObjectURL(event.target.files[0])
         // },
-        async saveFrontPhoto() {
+        async saveFrontPhoto() {    
             this.progress = 0;
+            this.progress += 99.999;        
             const token = localStorage.getItem('loginToken');
             const config = {
                 onUploadProgress: progressEvent => {
-                    const { loaded, total } = progressEvent;
+                    const { loaded, total } = progressEvent;                    
                     this.progress = Math.round((loaded * 100) / total);
                 }
             };
+
             //changing webp
             /*
              * https://stackoverflow.com/questions/62209609/how-to-convert-any-image-to-webp
@@ -650,20 +681,18 @@ export default {
                     // Now we have a `blob` containing webp data
                     // Use the file rename trick to turn it back into a file
                     const myImage = new File([blob], 'my-new-name.webp', { type: blob.type });
-                    api.post('/api/oneuser/frontid_image', { 'idfrontSide': myImage }, token, config)
+                    api.post('/api/oneuser/frontid_image', { 'idfrontSide': myImage }, token, config.onUploadProgress)
                         .then(function (res) {
                             // Handle success
                             if (res.status == 200) {
                                 localStorage.setItem('idfrontSide', api.apiRoot + res.data.frontid_image_path);
                                 this.form.idfrontSideUploaded = api.apiRoot + res.data.frontid_image_path;
-                                this.progress = 100;
                             }
                         }.bind(this))
                         .catch(error => {
                             if (error.response) {
                                 // Response has been received from the server
                                 this.loading = false;
-                                this.progress = 0;
                                 this.form.error.message = error.response.data.message;
                             }
                         });
@@ -673,14 +702,12 @@ export default {
         },
         async saveBackPhoto() {
             this.progress2 = 0;
+            this.progress2 += 99.999;      
             const token = localStorage.getItem('loginToken');
             const config = {
                 onUploadProgress: progressEvent => {
                     const { loaded, total } = progressEvent;
-                    this.progress = Math.round((loaded * 100) / total)/1.2;
-                    if (this.progress < 100) {
-                        console.log(`${loaded} bytes of ${total} bytes.${this.progress}%`)
-                    }
+                    this.progress2 = Math.round((loaded * 100) / total);
                 }
             };
             let image = new Image();
@@ -693,20 +720,18 @@ export default {
                     // Now we have a `blob` containing webp data
                     // Use the file rename trick to turn it back into a file
                     const myImage = new File([blob], 'my-new-name.webp', { type: blob.type });
-                    api.post('/api/oneuser/backid_image', { 'idbackSide': myImage }, token, config)
+                    api.post('/api/oneuser/backid_image', { 'idbackSide': myImage }, token, config.onUploadProgress)
                         .then(function (res) {
                             // Handle success
                             if (res.status == 200) {
                                 localStorage.setItem('idbackSide', api.apiRoot + res.data.backid_image_path);
                                 this.form.idbackSideUploaded = api.apiRoot + res.data.backid_image_path;
-                                this.progress2 = 100;
                             }
                         }.bind(this))
                         .catch(error => {
                             if (error.response) {
                                 // Response has been received from the server
                                 this.loading = false;
-                                this.progress2 = 0;
                                 this.form.error.message = error.response.data.message;
                             }
                         });
@@ -714,15 +739,15 @@ export default {
             }
             image.src = URL.createObjectURL(this.form.idbackSide[0]);
         },
-        get_township(event){
+        get_township(event) {
             const township = this.state_township;
             // const result = township.filter((e) => e[0] === event).map((e) => {
             //     return e[1]
             // });
-            const result = township.filter((e) =>e[0] == event);
+            const result = township.filter((e) => e[0] == event);
             let township_data_arr;
-            if(result.length > 0){
-                this.selected_township=[];
+            if (result.length > 0) {
+                this.selected_township = [];
                 result.forEach(element => {
                     township_data_arr = element[1];
                 });
@@ -730,7 +755,7 @@ export default {
                     this.selected_township.push(element);
                 });
             }
-           
+
         }
     },
     async mounted() {
@@ -740,48 +765,49 @@ export default {
         const backimg = localStorage.getItem('idbackSide');
         this.form.idbackSideUploaded = backimg;
         this.username = get_username;
-        const config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem('loginToken')}` }
-        };
-        api.get('/api/customer_verified', config)
+        const token = localStorage.getItem('loginToken');
+        await api.get('/api/customer_verified', null, token)
             .then(function (res) {
                 const verifiedStatus = res.data.data.message || res.data.data.attribute.message;
+                const status = res.data.data.message || res.data.data.attribute.vertified_status;
                 this.verifiedStatus = res.data.data.message || res.data.data.attribute.message;
-                if (verifiedStatus == "已验证") {
-                    this.form.isverified = res.data.data.attribute.message;
-                    this.form.id_name = res.data.data.attribute.id_name;
-                    this.form.id_number = res.data.data.attribute.id_number;
-                    this.form.idfrontSideUploaded = res.data.data.attribute.idfrontSide;
-                    this.form.idbackSideUploaded = res.data.data.attribute.idbackSide;
-                    this.form.contactperson1 = res.data.data.attribute.contactperson1;
-                    this.form.phone1 = res.data.data.attribute.phone1;
-                    this.form.contactperson2 = res.data.data.attribute.contactperson2;
-                    this.form.phone2 = res.data.data.attribute.phone2;
-                    this.form.bank_name = res.data.data.attribute.bank_name;
-                    this.form.bank_card = res.data.data.attribute.bank_card;
 
-                    this.form.residential = res.data.data.attribute.residential;
-                    this.form.education = res.data.data.attribute.education;
-                    this.form.marital = res.data.data.attribute.marital;
-                    this.form.contact_info = res.data.data.attribute.contact_info;
-                    this.form.province_residence = res.data.data.attribute.province_residence;
-                    this.form.address = res.data.data.attribute.address;
-                    this.form.social_status = res.data.data.attribute.social_status;
-                    this.form.unit_type = res.data.data.attribute.unit_type;
-                    this.form.unit_address_state = res.data.data.attribute.unit_address_state;
-                    this.form.unit_address_township = res.data.data.attribute.unit_address_township;
-                    this.form.unit_other_address = res.data.data.attribute.unit_other_address;
-                    this.form.monthly_income = res.data.data.attribute.monthly_income;
-                    this.form.work_phone = res.data.data.attribute.work_phone;
-                    this.form.family_name = res.data.data.attribute.family_name;
-                    this.form.family_ph_number = res.data.data.attribute.family_ph_number;
-                    this.form.family_relation = res.data.data.attribute.family_relation;
-                    this.form.emergency_name = res.data.data.attribute.emergency_name;
-                    this.form.emergency_ph_number = res.data.data.attribute.emergency_ph_number;
-                    this.form.emergency_relation = res.data.data.attribute.emergency_relation;
+                this.form.isverified = res.data.data.attribute.message;
+                this.form.id_name = res.data.data.attribute.id_name;
+                this.form.id_number = res.data.data.attribute.id_number;
+                this.form.idfrontSideUploaded = res.data.data.attribute.idfrontSide;
+                this.form.idbackSideUploaded = res.data.data.attribute.idbackSide;
+                this.form.contactperson1 = res.data.data.attribute.contactperson1;
+                this.form.phone1 = res.data.data.attribute.phone1;
+                this.form.contactperson2 = res.data.data.attribute.contactperson2;
+                this.form.phone2 = res.data.data.attribute.phone2;
+                this.form.bank_name = res.data.data.attribute.bank_name;
+                this.form.bank_card = res.data.data.attribute.bank_card;
 
-                    this.form.remark = res.data.data.attribute.remark;
-                    this.form.signature = res.data.data.attribute.signature;
+                this.form.residential = res.data.data.attribute.residential;
+                this.form.education = res.data.data.attribute.education;
+                this.form.marital = res.data.data.attribute.marital;
+                this.form.contact_info = res.data.data.attribute.contact_info;
+                this.form.province_residence = res.data.data.attribute.province_residence;
+                this.form.address = res.data.data.attribute.address;
+                this.form.social_status = res.data.data.attribute.social_status;
+                this.form.unit_type = res.data.data.attribute.unit_type;
+                this.form.unit_address_state = res.data.data.attribute.unit_address_state;
+                this.form.unit_address_township = res.data.data.attribute.unit_address_township;
+                this.form.unit_other_address = res.data.data.attribute.unit_other_address;
+                this.form.monthly_income = res.data.data.attribute.monthly_income;
+                this.form.work_phone = res.data.data.attribute.work_phone;
+                this.form.family_name = res.data.data.attribute.family_name;
+                this.form.family_ph_number = res.data.data.attribute.family_ph_number;
+                this.form.family_relation = res.data.data.attribute.family_relation;
+                this.form.emergency_name = res.data.data.attribute.emergency_name;
+                this.form.emergency_ph_number = res.data.data.attribute.emergency_ph_number;
+                this.form.emergency_relation = res.data.data.attribute.emergency_relation;
+
+                this.form.remark = res.data.data.attribute.remark;
+                this.form.signature = res.data.data.attribute.signature;
+
+                if (verifiedStatus == "已验证" && status == 1) {
 
                     this.items[1].disabled = false;
                     this.items[2].disabled = false;
@@ -790,14 +816,14 @@ export default {
                     this.items[5].disabled = false;
 
                     this.form.fileInput = true;
-                }else {
+                } else {
                     res.data.data.config_data[0].state.forEach(element => {
                         this.unit_address_state.push(element[0]);
                         this.state_township.push(element);
                     });
                 }
 
-                if (verifiedStatus == '已验证') {
+                if (verifiedStatus == '已验证' && status == 1) {
                     this.form.disabled = true;
                 } else if (verifiedStatus == '未验证') {
                     this.form.disabled = false;
@@ -821,19 +847,21 @@ export default {
     }
 }
 </script>
-<style>
-.v-tab.v-tab {
+<style>.v-tab.v-tab {
     min-width: 10px !important;
     padding: 0% !important;
 }
-.file_input > .v-input__control{
+
+.file_input>.v-input__control {
     display: none !important;
 }
+
 .file_input {
     justify-content: center;
     padding: 5px 50px;
 }
-.file_input > .v-input__prepend {
+
+.file_input>.v-input__prepend {
     color: white;
     border: 1px solid;
     background-color: blue;
@@ -842,7 +870,7 @@ export default {
     padding: 5px 50px;
     margin-right: 0% !important;
 }
+
 .v-responsive__sizer {
     padding-bottom: 80% !important;
-}
-</style>
+}</style>

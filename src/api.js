@@ -25,6 +25,7 @@ const doRequest = async (path, params, method, activeToken, onUploadProgress) =>
             method: 'HEAD',
             mode: 'no-cors'
         }
+        options.onUploadProgress = onUploadProgress
     }
 
     const httpMethods = method.toLowerCase();
@@ -33,7 +34,7 @@ const doRequest = async (path, params, method, activeToken, onUploadProgress) =>
             'Authorization': `Bearer ${activeToken}`,
             'content-type': 'multipart/form-data',
         },
-        onUploadProgress
+        onUploadProgress: onUploadProgress
     }).then((res) => {
         if (res.status === 204) {
             return undefined;
