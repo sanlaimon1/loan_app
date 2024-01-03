@@ -4,8 +4,8 @@
   "webDir": "dist",
   "bundledWebRuntime": true,
   "server": {
-    "allowNavigation": [        
-        "https://api.cybdzw.com"
+    "allowNavigation": [
+        "https://api.dv6688.com"
       ]
   },
   "plugins": {

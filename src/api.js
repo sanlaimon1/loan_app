@@ -1,5 +1,5 @@
 import axios from "axios";
-const apiRoot = 'https://api.cybdzw.com';
+const apiRoot = 'https://api.dv6688.com';
 
 const objectToQueryString = (obj) => {
     return Object.keys(obj).map(key => key + '=' + obj[key]).join('&');
